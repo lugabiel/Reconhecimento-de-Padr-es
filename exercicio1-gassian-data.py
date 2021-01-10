@@ -59,7 +59,9 @@ X,Y = np.meshgrid(seqi,seqj)
 
 M1 = [np.zeros([len(seqi),len(seqj)])]
 M2 = [np.zeros([len(seqi),len(seqj)])]
-correlacao = 0
+correlacao = 0.1
+
+# mesuring probability surface for both datasets
 ci = 0
 for i in seqi:
     ci = ci + 1
@@ -72,17 +74,15 @@ for i in seqi:
         M1[0][ci-1][cj-1] = aux
         M2[0][ci-1][cj-1] = aux2
 
-# priting gen dataset
+#  gen dataset 
 plt.scatter(xgenA,ygenA, color = 'r',marker =".")
 plt.scatter(xgenB,ygenB, color = 'g',marker ='.')
-#plt.show()
 
 # printing gen dataset 3d
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-ax = fig.add_subplot(111, projection='3d')
 surface  = ax.plot_surface(X,Y,M1[0]+M2[0],cmap=cm.coolwarm,linewidth=0, antialiased=True)
-#surface2 = ax.plot_surface(X,Y,M2[0]+3)
+
 # Customize the z axis.
 ax.set_zlim(0,0.67)
 ax.zaxis.set_major_locator(LinearLocator(10))
