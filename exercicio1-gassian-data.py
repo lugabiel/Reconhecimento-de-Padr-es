@@ -23,7 +23,7 @@ def pdf2var(x,y,u1,u2,s1,s2,p):
     C = ((x-u1)**2)/((s1**2))
     D = (((y-u2)**2)/((s2)**2))
     E = ((-2*p*(x-u1)*(y-u2))/(s1*s2)) #termo de covariancia
-    return A*mt.exp(B*(C+D+E))
+    return A*np.exp(B*(C+D+E))
     #return (1/(2*mt.pi*s1*s2*np.sqrt(1-(p**2))))*mt.exp(((-(1)/(2*(1-(p**2)))))*((((x-u1)**2)/((s1**2))+(((y-u2)**2)/((s2)**2))-((2*p*(x-u1)*(y-u2))/(s1*s2)))))
 
 # mesuring probability surface for both datasets
