@@ -5,10 +5,8 @@
 # importing libraries
 
 import math as mt
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
@@ -31,11 +29,16 @@ def pdf2var(x,y,u1,u2,s1,s2,p):
 # mesuring probability surface for both datasets
 def genSurface(mgenA,dgenA,mgenB,dgenB,correlacao,M1,M2):
     ci = 0
+    mgenA[0] -= 0.03
     for i in seqi:
         ci = ci + 1
         cj = 0
+        
+        if mgenA[0] < 0:
+           mgenA[0] = 7 
         for j in seqj:
             cj = cj + 1
+            
             aux  = pdf2var(i,j,mgenA[0],mgenA[1],dgenA[0],dgenA[1],correlacao)
             aux2 = pdf2var(i,j,mgenB[0],mgenB[1],dgenB[0],dgenB[1],correlacao)
             #print(ci,cj,'--', aux, aux2)
@@ -76,29 +79,45 @@ X,Y = np.meshgrid(seqi,seqj)
 
 M1 = [np.zeros([len(seqi),len(seqj)])]
 M2 = [np.zeros([len(seqi),len(seqj)])]
-correlacao = 0.0
-#steps = 10
-#for steps in steps:
 
-# mesuring probability surface for both datasets
-M1, M2 = genSurface(mgenA,dgenA,mgenB,dgenB,correlacao, M1, M2)
-
-#  gen dataset A & B
-plt.scatter(xgenA,ygenA, color = 'r',marker =".")
-plt.scatter(xgenB,ygenB, color = 'g',marker ='.')
-
-# printing gen dataset 3d
+plt.ion()
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-surface  = ax.plot_surface(X,Y,M1[0]+M2[0],cmap=cm.coolwarm,linewidth=0, antialiased=True)
 
 # Customize the z axis.
-ax.set_zlim(0,0.67)
+ax.set_zlim(0,1.5)
 ax.zaxis.set_major_locator(LinearLocator(10))
 ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+
+# dataset params
+correlacao = 0.2
+steps = 20
+
+# printing first frame of data sequence
+M1, M2 = genSurface(mgenA,dgenA,mgenB,dgenB,correlacao, M1, M2)
+surface  = ax.plot_surface(X,Y,M1[0]+M2[0],cmap=cm.coolwarm,linewidth=0, antialiased=True)
 
 # Add a color bar which maps values to colors.
 fig.colorbar(surface, shrink=0.5, aspect=5)
 
-plt.show()
-
+while True:
+    print('initialiazing',correlacao)
+    for step in range(steps) :
+        if correlacao > 0.9:
+            correlacao = 0.1
+        print('redrwaing',correlacao)
+        # mesuring probability surface for both datasets 
+        M1, M2 = genSurface(mgenA,dgenA,mgenB,dgenB,correlacao, M1, M2)
+        
+        #  gen dataset A & B
+        #plt.scatter(xgenA,ygenA, color = 'r',marker =".")
+        #plt.scatter(xgenB,ygenB, color = 'g',marker ='.')
+    
+        plt.pause(0.01)
+        # printing gen dataset 3d
+        ax.clear()
+        ax.set_zlim(0,1.0)
+        ax.set_title('correlacao = '+str(correlacao))
+        surface  = ax.plot_surface(X,Y,M1[0]+M2[0],cmap=cm.coolwarm,linewidth=0, antialiased=True)
+        correlacao += 0.025
+    plt.show()
