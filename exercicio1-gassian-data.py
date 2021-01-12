@@ -4,13 +4,18 @@
 
 # importing libraries
 
-import math as mt
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
+class dataset(object):
+    '''dataset class for data generation'''
+    def __init__(self,desvio,media):
+        self.desvio = desvio
+        self.media  = media
+        
 
 # funcao densidade de probabilidade para 2 variaveis
 def pdf2var(x,y,u1,u2,s1,s2,p):
@@ -18,7 +23,7 @@ def pdf2var(x,y,u1,u2,s1,s2,p):
     # u1,u2: media media de cada variavel no dataset 
     # s1,s2: desvio padrao de cada variavel no dataset
     # p    : coeficiente de correlacao 
-    A = (1/(2*mt.pi*s1*s2*np.sqrt(1-(p**2))))
+    A = (1/(2*np.pi*s1*s2*np.sqrt(1-(p**2))))
     B = ((-(1)/(2*(1-(p**2)))))
     C = ((x-u1)**2)/((s1**2))
     D = (((y-u2)**2)/((s2)**2))
@@ -95,8 +100,19 @@ steps = 20
 
 # printing first frame of data sequence
 M1, M2 = genSurface(mgenA,dgenA,mgenB,dgenB,correlacao, M1, M2)
-surface  = ax.plot_surface(X,Y,M1[0]+M2[0],cmap=cm.coolwarm,linewidth=0, antialiased=True)
+#surface  = ax.plot_surface(X,Y,M1[0]+M2[0],cmap=cm.coolwarm,linewidth=0, antialiased=True)
+plt.figure()
+plt.scatter(xgenA,ygenA, color = 'r',marker =".")
+plt.plot()
+plt.scatter(xgenB,ygenB, color = 'g',marker ='.')
+eixos = ['Dias até diagnóstico','Complexidade']
+plt.title(eixos[1]+' vs '+eixos[1])
+plt.xlabel(eixos[1])
+plt.ylabel(eixos[0])
 
+plt.show()
+plt.pause(10)
+    
 # Add a color bar which maps values to colors.
 fig.colorbar(surface, shrink=0.5, aspect=5)
 
