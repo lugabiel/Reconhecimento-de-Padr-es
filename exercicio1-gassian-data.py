@@ -10,11 +10,33 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+
 class dataset(object):
     '''dataset class for data generation'''
-    def __init__(self,desvio,media):
+    def generate(self):
+        self.x      = np.random.normal(self.desvio,self.media,(self.size,1))
+        self.y      = np.random.normal(self.desvio,self.media,(self.size,1))
+        pass
+    
+    def __init__(self,desvio=None,media=None,size=None):
         self.desvio = desvio
         self.media  = media
+        self.size   = size
+        self.x      = None
+        self.y      = None
+    def info(self):
+        print(self.desvio)
+        print(self.media)
+        print(self.size)
+        if input('print y/n?') == 'y':
+            print(self.x,self.y)
+
         
 
 # funcao densidade de probabilidade para 2 variaveis
@@ -105,6 +127,8 @@ plt.figure()
 plt.scatter(xgenA,ygenA, color = 'r',marker =".")
 plt.plot()
 plt.scatter(xgenB,ygenB, color = 'g',marker ='.')
+
+# axis for interpretation only
 eixos = ['Dias até diagnóstico','Complexidade']
 plt.title(eixos[1]+' vs '+eixos[1])
 plt.xlabel(eixos[1])
